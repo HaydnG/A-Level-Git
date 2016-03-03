@@ -94,6 +94,7 @@ public class Game extends Canvas implements Runnable{
 		RUNNING= true; //Allows the loop to run
 		THREAD = new Thread(this,"Display"); //Creates game thread - Starts run loop as Game.java is runnable
 		THREAD.start(); //Starts the thread begins thread - run() loop
+		
 	}
 	
 	public synchronized void stop() {
