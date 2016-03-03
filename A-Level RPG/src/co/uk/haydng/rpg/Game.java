@@ -14,7 +14,7 @@ import co.uk.haydng.rpg.graphics.Display;
 
 public class Game extends Canvas implements Runnable{
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1;
 	
 	private Thread THREAD;
 	private boolean RUNNING = false;
@@ -38,7 +38,7 @@ public class Game extends Canvas implements Runnable{
 		FRAME = new JFrame();
 	}
 
-	public void run() { //Main game loop
+	public void run() { //Main game loop 
 		while (RUNNING) {
 			tick();
 			render();		
@@ -61,16 +61,21 @@ public class Game extends Canvas implements Runnable{
 			pixels[i] = display.pixels[i];
 		}
 		
+		draw(buffer);
+	}
 		
+	
+	public void draw(BufferStrategy buffer){
 		Graphics g = buffer.getDrawGraphics();
 		//g.setColor(Color.black);
 		//g.fillRect(0, 0, getWidth(), getHeight());
 		g.drawImage(img,0,0,getWidth(),getHeight(),null);
 		g.dispose();
 		buffer.show();
+	
 	}
 	
-	public static void main(String[] args){ //Main method
+	public static void main(String[] args){ //Main method  - Called on program start
 		Game game = new Game(); //Creates game object
 		game.FRAME.setResizable(false);
 		game.FRAME.setTitle("A-Level RPG");
@@ -87,9 +92,10 @@ public class Game extends Canvas implements Runnable{
 	//START/STOP
 	public synchronized void start(){
 		RUNNING= true; //Allows the loop to run
-		THREAD = new Thread(this,"Display"); //Creates game thread - run() loop
+		THREAD = new Thread(this,"Display"); //Creates game thread - Starts run loop as Game.java is runnable
 		THREAD.start(); //Starts the thread begins thread - run() loop
 	}
+	
 	public synchronized void stop() {
 		RUNNING = false; //Stops the loop from being able to be ran
 		try {
