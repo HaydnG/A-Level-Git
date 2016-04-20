@@ -4,6 +4,7 @@ import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.MouseInfo;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
@@ -23,6 +24,7 @@ public class Game extends Canvas implements Runnable{
 	public static int SCALE = 3;
 	public static int WIDTH = 300;
 	public static int HEIGHT = WIDTH / 16 * 10;
+	public static String title = "A-Level RPG";
 	
 	private Display display;
 	
@@ -39,10 +41,36 @@ public class Game extends Canvas implements Runnable{
 	}
 
 	public void run() { //Main game loop 
+		
+		long lastTime = System.nanoTime();
+		long timer = System.currentTimeMillis();
+		final double ns = 1000000000.0 / 60.0;
+		double delta = 0;
+		int ticks = 0;
+		int frames = 0;
 		while (RUNNING) {
-			tick();
-			render();		
+			long now = System.nanoTime();
+			delta += (now-lastTime) / ns;
+			lastTime = now;
+			while (delta >= 1) {
+				tick();
+				ticks++;
+				delta--;
+			}		
+			render();	
+			frames++;
+			
+			if (System.currentTimeMillis() - timer > 1000){
+				timer += 1000;
+				System.out.println(ticks + " :Tickrate  |  " + frames + " :Fps");
+				int x = FRAME.getX() - MouseInfo.getPointerInfo().getLocation().x;
+			    int y = FRAME.getY() - MouseInfo.getPointerInfo().getLocation().y;
+				FRAME.setTitle(title + "  |  " + ticks + " :Tickrate  |  " + frames + " :Fps");
+				ticks = 0;
+				frames = 0;
+			}
 		}
+		stop();
 	}
 	
 	public void tick(){
@@ -78,7 +106,7 @@ public class Game extends Canvas implements Runnable{
 	public static void main(String[] args){ //Main method  - Called on program start
 		Game game = new Game(); //Creates game object
 		game.FRAME.setResizable(false);
-		game.FRAME.setTitle("A-Level RPG");
+		game.FRAME.setTitle(Game.title);
 		game.FRAME.add(game);
 		game.FRAME.pack();
 		game.FRAME.setLocationRelativeTo(null);
