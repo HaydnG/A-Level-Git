@@ -25,7 +25,7 @@ public class Game extends Canvas implements Runnable{
 	public static int SCALE = 3;
 	public static int WIDTH = 300;
 	public static int HEIGHT = WIDTH / 16 * 10;
-	public static String title = "RPG - Screen render test";
+	public static String title = "HaydnG - RPG - Screen render test";
 	
 	private Display display;
 	
@@ -76,10 +76,8 @@ public class Game extends Canvas implements Runnable{
 	}
 	int x = 0, y = 0;
 	public void tick(){
-		y=y+random.nextInt(20);
-		y=y-random.nextInt(20);
-		x=x+random.nextInt(20);
-		x=x-random.nextInt(20);
+		y++;
+		x++;
 	}
 	
 	public void render(){
