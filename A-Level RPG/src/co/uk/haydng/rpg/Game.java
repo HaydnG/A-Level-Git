@@ -8,6 +8,7 @@ import java.awt.MouseInfo;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
+import java.util.Random;
 
 import javax.swing.JFrame;
 
@@ -16,7 +17,7 @@ import co.uk.haydng.rpg.graphics.Display;
 public class Game extends Canvas implements Runnable{
 
 	private static final long serialVersionUID = 1;
-	
+	private Random random = new Random();
 	private Thread THREAD;
 	private boolean RUNNING = false;
 	private JFrame FRAME;
@@ -24,7 +25,7 @@ public class Game extends Canvas implements Runnable{
 	public static int SCALE = 3;
 	public static int WIDTH = 300;
 	public static int HEIGHT = WIDTH / 16 * 10;
-	public static String title = "A-Level RPG";
+	public static String title = "RPG - Screen render test";
 	
 	private Display display;
 	
@@ -57,24 +58,28 @@ public class Game extends Canvas implements Runnable{
 				ticks++;
 				delta--;
 			}		
+			
 			render();	
 			frames++;
-			
+
 			if (System.currentTimeMillis() - timer > 1000){
 				timer += 1000;
-				System.out.println(ticks + " :Tickrate  |  " + frames + " :Fps");
-				int x = FRAME.getX() - MouseInfo.getPointerInfo().getLocation().x;
-			    int y = FRAME.getY() - MouseInfo.getPointerInfo().getLocation().y;
-				FRAME.setTitle(title + "  |  " + ticks + " :Tickrate  |  " + frames + " :Fps");
+				int tps = ticks; //Encase you want to measure over a short time (Current: 1000ms) so no multiplication needed
+				int fps = frames;
+				System.out.println(tps + " :Tickrate  |  " + fps + " :Fps");
+				FRAME.setTitle(title + "  |  " + tps + " :Tickrate  |  " + fps + " :Fps");
 				ticks = 0;
 				frames = 0;
 			}
 		}
 		stop();
 	}
-	
+	int x = 0, y = 0;
 	public void tick(){
-		
+		y=y+random.nextInt(20);
+		y=y-random.nextInt(20);
+		x=x+random.nextInt(20);
+		x=x-random.nextInt(20);
 	}
 	
 	public void render(){
@@ -84,7 +89,7 @@ public class Game extends Canvas implements Runnable{
 			return;
 		}
 		display.clear();
-		display.render();
+		display.render(x,y);
 		for (int i = 0; i < pixels.length; i++) {
 			pixels[i] = display.pixels[i];
 		}
